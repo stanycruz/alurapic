@@ -15,18 +15,15 @@ export default {
 
   data() {
     return {
-      titulo: 'Hadouken',
-      fotos: [
-        {
-          url: 'https://static1.patasdacasa.com.br/articles/8/10/38/@/4864-o-cachorro-inteligente-mostra-essa-carac-article_media_mobile-1.jpg',
-          titulo: 'cachorro'
-        },
-        {
-          url: 'https://static1.patasdacasa.com.br/articles/8/10/38/@/4864-o-cachorro-inteligente-mostra-essa-carac-article_media_mobile-1.jpg',
-          titulo: 'cachorrão'
-        }
-      ]
+      titulo: 'Alurapic',
+      fotos: []
     }
+  },
+
+  created() {  
+    this.$http.get('http://localhost:3000/v1/fotos')
+      .then(res => res.json())
+      .then(fotos => this.fotos = fotos, err => console.log(err));
   }
 };
 </script>
