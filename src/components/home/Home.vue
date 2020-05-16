@@ -2,12 +2,24 @@
   <div>
     <h1 class="centralizado">{{ titulo }}</h1>
 
-    <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="filtre por parte do título">
+    <input
+      type="search"
+      class="filtro"
+      @input="filtro = $event.target.value"
+      placeholder="filtre por parte do título"
+    />
 
     <ul class="lista-fotos">
       <li class="lista-fotos-item" v-for="foto in fotosComFiltro" :key="foto.url">
         <meu-painel :titulo="foto.titulo">
           <imagem-responsiva :url="foto.url" :titulo="foto.titulo" />
+          <meu-botao
+            tipo="button"
+            rotulo="REMOVER"
+            @botaoAtivado="remove(foto)"
+            :confirmacao="false"
+            estilo="perigo"
+          />
         </meu-painel>
       </li>
     </ul>
@@ -17,12 +29,13 @@
 <script>
 import Painel from '../shared/painel/Painel.vue';
 import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue';
+import Botao from '../shared/botao/Botao.vue';
 
 export default {
-
   components: {
-    'meu-painel' : Painel,
-    'imagem-responsiva': ImagemResponsiva
+    'meu-painel': Painel,
+    'imagem-responsiva': ImagemResponsiva,
+    'meu-botao': Botao
   },
 
   data() {
@@ -30,7 +43,7 @@ export default {
       titulo: 'Alurapic',
       fotos: [],
       filtro: ''
-    }
+    };
   },
 
   computed: {
@@ -44,29 +57,39 @@ export default {
     }
   },
 
-  created() {  
-    this.$http.get('http://localhost:3000/v1/fotos')
+  methods: {
+    remove(foto) {
+      console.log(`Removido ${foto.titulo}`);
+    }
+  },
+
+  created() {
+    this.$http
+      .get('http://localhost:3000/v1/fotos')
       .then(res => res.json())
-      .then(fotos => this.fotos = fotos, err => console.log(err));
+      .then(
+        fotos => (this.fotos = fotos),
+        err => console.log(err)
+      );
   }
 };
 </script>
 
 <style>
-  .centralizado {
-    text-align: center;
-  }
+.centralizado {
+  text-align: center;
+}
 
-  .lista-fotos {
-    list-style: none;
-  }
+.lista-fotos {
+  list-style: none;
+}
 
-  .lista-fotos .lista-fotos-item {
-    display: inline-block;
-  }
+.lista-fotos .lista-fotos-item {
+  display: inline-block;
+}
 
-  .filtro {
-    display: block;
-    width: 100%;
-  }
+.filtro {
+  display: block;
+  width: 100%;
+}
 </style>
