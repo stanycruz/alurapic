@@ -15,6 +15,7 @@ export default class FotoService {
     }
 
     apaga(id) {
-        return this._resource.delete({ id });
+        return this._resource
+            .delete({ id });
     }
 }
