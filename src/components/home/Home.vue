@@ -65,21 +65,24 @@ export default {
 
   methods: {
     remove(foto) {
-      this.$http.delete(`http://localhost:3000/v1/${foto._id}`)
-      .then(() => {
+      this.resource
+        .delete({ id: foto._id })
+        .then(() => {
           let indice = this.fotos.indexOf(foto);
           this.fotos.splice(indice, 1);
           this.mensagem = `Foto "${foto.titulo}" removida com sucesso`
         }, err => {
           console.log(err);
           this.mensagem = 'Não foi possível remover a foto';
-      });
+        }
+      );
     }
   },
 
   created() {
-    this.$http
-      .get('http://localhost:3000/v1/fotos')
+    this.resource = this.$resource('v1/fotos{/id}');
+    this.resource
+      .query()
       .then(res => res.json())
       .then(fotos => (this.fotos = fotos), err => console.log(err));
   }
